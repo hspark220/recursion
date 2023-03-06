@@ -21,23 +21,45 @@ const fibsRec = num => {
     }
 }
 
-const mergeSort = (array1, array2) => {
-    if (array2) {
-        if (array1.length < 2 && array2.length < 2) {
-
-        }
-        return array2;
-    } else {
-        const length = array1.length;
-        if (length%2 == 0) {
-            return mergeSort(array1.splice(0, length/2), array1.splice(-length/2));
+const mergeSort = array => {
+    const middle = (array.length/2)%2 == 0 ? array.length/2 : array.length/2+1
+    if (array.length <= 2) {
+        let copy = [];
+        if (array.length == 1) {
+            copy.push(array[0]);
+            return copy;
         } else {
-            return mergeSort(array1.splice(0, length/2+1), array1.splice(-length/2));
+            if (array[0] > array[1]) {
+                copy.push(array[1]);
+                copy.push(array[0]);
+                return copy;
+            } else {
+                copy.push(array[0])
+                copy.push(array[1]);
+                return copy;
+            }
         }
-        
+    } else {
+        let array1 = mergeSort(array.splice(0,middle));
+        let array2 = mergeSort(array.splice(-middle));
+        const result = [];
+
+        while (array1.length > 0 && array2.length > 0) {
+            if (array1[0] > array2[0]) {
+                result.push(array2.shift());
+            } else {
+                result.push(array1.shift());
+            }
+        }
+        if (array1.length == 0) {
+            result.concat(array2);
+        } else {
+            result.concat(array1);
+        }
+        return result;
     }
 }
 
 // console.log(fibs(10));
 // console.log(fibsRec(10));
-console.log(mergeSort([1,2,4]));
+console.log(mergeSort([3,2,1,3,5,7,8]));
